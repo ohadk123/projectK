@@ -19,4 +19,4 @@ $(BUILD_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(KERNEL): $(OBJS)
-	$(LD) $(LDFLAGS) -Tkernel.lds $< -o $(KERNEL) > System.map
+	$(LD) $(LDFLAGS) -Tkernel.lds $< -o $(KERNEL) > ../System.map
