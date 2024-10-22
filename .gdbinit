@@ -9,3 +9,4 @@ set disassembly-flavor intel
 layout asm
 layout reg
 b *0x7c00
+b *0x7f00

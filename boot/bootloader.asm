@@ -1,4 +1,3 @@
-org 0x7C00
 bits 16
 start: jmp boot
 ; 
@@ -8,16 +7,7 @@ start: jmp boot
 ; 0x00007C00 - 0x00007DFF     Bootloader  (512 Bytes)
 ; 0x00007E00 - 0x0007FFFF     Kernel      (480.5 KB)
 ;************************************************
-%define BOOTSECT 0x7C0
 %define KERNSECT 0x7E0
-%define STACKSECT 0x50
-
-boot_msg:
-	db "Welcome to my Operating System!", 0x0A, 0x0D, 0x00
-belowMB: 
-	db 0
-overMB:
-	db 0
 
 ; Boot process starts here, with a simple message
 boot:
@@ -80,35 +70,46 @@ after_a20:
 
 ; Configure the stack
 set_stack:
-	mov ax, STACKSECT
+	mov ax, 0x00
 	mov ss, ax
-	mov ax, BOOTSECT - (STACKSECT * 0x10)
+	mov ax, 0x7C00
 	mov sp, ax
 
-; Load the GDT, nothing much
-load_gdt:
-	lgdt [gdtr]
-	jmp 0x08:load_seg
-	
-; Load the data segments to the kernel's data segments descriptor
-load_seg:
-	mov ax, 0x10
-	mov ds, ax
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
-
-; Enter protected mode
-enter_pm:
-	mov eax, cr0
-	or eax, 0x01
-	mov cr0, eax
+;load_gdt:
+;	lgdt [gdtr]
+;	jmp 0x08:load_seg
+;
+;; Load the data segments to the kernel's data segments descriptor
+;load_seg:
+;	mov ax, 0x10
+;	mov ds, ax
+;	mov es, ax
+;	mov fs, ax
+;	mov gs, ax
+;
+;; Enter protected mode
+;enter_pm:
+;	mov eax, cr0
+;	or eax, 0x01
+;	mov cr0, eax
 
 ; Jump to the kernel
-	jmp KERNSECT:0x00
+	jmp [0x7E00 + 0x18]
 
 	cli
 	hlt
+
+boot_msg:
+	db "Welcome to my Operating System!", 0x0A, 0x0D, 0x00
+beforeGDT: 
+	db "Before GDT", 0x0A, 0x0D, 0x00
+afterGDT:
+	db "After GDT", 0x0A, 0x0D, 0x00
+	
+belowMB: 
+	db 0
+overMB:
+	db 0
 
 ;************************************************
 ; Prints a string
@@ -139,27 +140,26 @@ busy_a20:
 ; 0x10 - Kernel Data Segment
 ;************************************************
 gdt:
-  ; null
-  dd 0x00000000
-  dd 0x00000000
+	; null
+	dd 0x00000000
+	dd 0x00000000
 
-  ; kernel code
-  dw 0xFFFF
-  dw 0x0000
-  db 0b10011010
-  db 0b11001111
-  db 0x00
+	; kernel code
+	dw 0xFFFF
+	dw 0x0000
+	db 0b10011010
+	db 0b11001111
+	db 0x00
 
-  ; kernel data
-  dw 0xFFFF
-  dw 0x0000
-  db 0b10010010
-  db 0b11001111
-  db 0x00
-
+	; kernel data
+	dw 0xFFFF
+	dw 0x0000
+	db 0b10010010
+	db 0b11001111
+	db 0x00
 gdtr:
-  dw gdtr - gdt - 1
-  dd gdt
+	dw gdtr - gdt - 1
+	dd gdt
 
 times 510 - ($ - $$) db 0
 dw 0xAA55

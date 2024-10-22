@@ -1,12 +1,22 @@
 BUILD_DIR=../build/kernel
+KERNEL=$(BUILD_DIR)/kernel
 
-SRCS := $(wildcard *.asm)
-OBJS := $(patsubst %.asm, $(BUILD_DIR)/%.o, $(SRCS))
+CC=i686-elf-gcc
+CFLAGS=-ffreestanding -nostdlib -m32 -O -nostdinc -nolibc -Wall -fno-builtin
 
-all: build $(OBJS)
+LD=i686-elf-ld
+LDFLAGS=-m elf_i386 -nmagic
+
+SRCS := $(wildcard *.c)
+OBJS := $(patsubst %.c, $(BUILD_DIR)/%.o, $(SRCS))
+
+all: build $(KERNEL)
 
 build:
 	mkdir -p $(BUILD_DIR)
 
-$(BUILD_DIR)/%.o: %.asm
-	nasm -f bin $< -o $@
+$(BUILD_DIR)/%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(KERNEL): $(OBJS)
+	$(LD) $(LDFLAGS) -Tkernel.lds $< -o $(KERNEL)
