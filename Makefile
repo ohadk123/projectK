@@ -5,7 +5,7 @@ DISK_IMG=disk.img
 
 all: build bootdisk
 
-.PHONY: bootdisk bootloader kernel
+.PHONY: bootdisk kernel bootloader
 
 build:
 	mkdir -p $(BUILD_DIR)
@@ -16,7 +16,7 @@ bootloader:
 kernel:
 	make -C kernel
 
-bootdisk: bootloader kernel
+bootdisk: kernel bootloader
 	dd if=/dev/zero of=$(DISK_IMG) bs=512 count=2880
 	dd conv=notrunc if=$(BOOTLOADER) of=$(DISK_IMG) bs=512 count=1 seek=0
 	# dd conv=notrunc if=$(KERNEL) of=$(DISK_IMG) bs=512 count=1 seek=1
@@ -30,4 +30,4 @@ run:
 	qemu-system-i386 -machine q35 -fda $(DISK_IMG)
 
 clean:
-	rm -frd build $(DISK_IMG)
+	rm -frd build $(DISK_IMG) System.map

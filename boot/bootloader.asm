@@ -68,6 +68,12 @@ after_a20:
 	mov al, [overMB]
 	mov [gs:di], al
 
+; Set VGA 80x25 video mode
+set_vga:
+	mov ah, 0x00
+	mov al, 0x03
+	int 0x10
+
 ; Configure the stack
 set_stack:
 	mov ax, 0x00
@@ -75,42 +81,35 @@ set_stack:
 	mov ax, 0x7C00
 	mov sp, ax
 
-;load_gdt:
-;	lgdt [gdtr]
-;	jmp 0x08:load_seg
-;
-;; Load the data segments to the kernel's data segments descriptor
-;load_seg:
-;	mov ax, 0x10
-;	mov ds, ax
-;	mov es, ax
-;	mov fs, ax
-;	mov gs, ax
-;
-;; Enter protected mode
-;enter_pm:
-;	mov eax, cr0
-;	or eax, 0x01
-;	mov cr0, eax
+load_gdt:
+	cli			; Can never be too sure
+	lgdt [gdtr]
+; Enter protected mode
+enter_pm:
+	mov eax, cr0
+	or al, 1
+	mov cr0, eax
+
+	jmp 0x08:load_seg
+
+bits 32
+; Load the data segments to the kernel's data segments descriptor
+load_seg:
+	mov ax, 0x10
+	mov ds, ax
+	mov es, ax
 
 ; Jump to the kernel
-	jmp [0x7E00 + 0x18]
-
+movek:
+	mov edx, 0x1234
+	xor edx, edx
+	mov dx, [0x7E00 + 0x18]
+	jmp edx
+halt:
 	cli
 	hlt
 
-boot_msg:
-	db "Welcome to my Operating System!", 0x0A, 0x0D, 0x00
-beforeGDT: 
-	db "Before GDT", 0x0A, 0x0D, 0x00
-afterGDT:
-	db "After GDT", 0x0A, 0x0D, 0x00
-	
-belowMB: 
-	db 0
-overMB:
-	db 0
-
+bits 16
 ;************************************************
 ; Prints a string
 ; si - Pointer to the string
@@ -127,11 +126,22 @@ print:
 done:
 	ret
 
+;************************************************
+; Checks if the a20 port is busy
+;************************************************
 busy_a20:
 	in al, 0x64
 	test al, 0x02
 	jnz busy_a20
 	ret
+
+boot_msg:
+	db "Welcome to my Operating System!", 0x0A, 0x0D, 0x00
+
+belowMB: 
+	db 0
+overMB:
+	db 0
 
 ;************************************************
 ; Global Descriptor Table
@@ -145,18 +155,13 @@ gdt:
 	dd 0x00000000
 
 	; kernel code
-	dw 0xFFFF
-	dw 0x0000
-	db 0b10011010
-	db 0b11001111
-	db 0x00
+	dd 0x0000FFFF
+	dd 0x00CF9A00
 
 	; kernel data
-	dw 0xFFFF
-	dw 0x0000
-	db 0b10010010
-	db 0b11001111
-	db 0x00
+	dd 0x0000FFFF
+	dd 0x008F9200
+
 gdtr:
 	dw gdtr - gdt - 1
 	dd gdt

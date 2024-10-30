@@ -3,6 +3,7 @@ KERNEL=$(BUILD_DIR)/kernel
 
 CC=i686-elf-gcc
 CFLAGS=-ffreestanding -nostdlib -m32 -O -nostdinc -nolibc -Wall -fno-builtin
+CFLAGS+=-gdwarf-4 -ggdb3
 
 LD=i686-elf-ld
 LDFLAGS=-m elf_i386 -nmagic -M
