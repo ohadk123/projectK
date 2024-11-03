@@ -1,6 +1,8 @@
-//#include "console.h"
+#include <console.h>
 
 void main() {
-    *((int*)0xb8000)=0x07690748;
+    consoleInit();
+    consoleWriteStr("Hello World");
+    consoleWriteStr("   This is a kernel");
     for(;;);
 }

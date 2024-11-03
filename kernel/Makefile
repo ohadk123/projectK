@@ -2,7 +2,7 @@ BUILD_DIR=../build/kernel
 KERNEL=$(BUILD_DIR)/kernel
 
 CC=i686-elf-gcc
-CFLAGS=-ffreestanding -nostdlib -m32 -O -nostdinc -nolibc -Wall -fno-builtin
+CFLAGS=-ffreestanding -nostdlib -m32 -O -nostdinc -nolibc -Wall -fno-builtin -I../include
 CFLAGS+=-gdwarf-4 -ggdb3
 
 LD=i686-elf-ld
@@ -20,4 +20,4 @@ $(BUILD_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(KERNEL): $(OBJS)
-	$(LD) $(LDFLAGS) -Tkernel.lds $< -o $(KERNEL) > ../System.map
+	$(LD) $(LDFLAGS) -Tkernel.lds $(OBJS) -o $(KERNEL) > ../System.map
