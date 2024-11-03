@@ -1,4 +1,4 @@
-source ~/.gef-2024.06.py
+# source ~/.gef-2024.06.py
 
 define hook-stop
 	printf "[%4x:%4x] ", $cs, $eip
@@ -8,7 +8,6 @@ end
 set architecture i8086
 set disassembly-flavor intel
 symbol-file build/kernel/kernel
-# layout asm
-# layout reg
+layout src
 b main
 target remote localhost:26000
