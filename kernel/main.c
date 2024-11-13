@@ -3,6 +3,7 @@
 void main() {
     consoleInit();
     consoleWriteStr("Hello World");
-    consoleWriteStr("   This is a kernel");
+    consoleClear();
+    consoleWriteStr("This is a kernel");
     for(;;);
 }
