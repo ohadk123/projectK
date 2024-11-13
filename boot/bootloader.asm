@@ -1,4 +1,4 @@
-bits 16
+[ BITS 16 ]
 start: jmp boot
 ; 
 ;************************************************
@@ -29,44 +29,15 @@ read_kern:
 	int 0x13
 	jc read_kern
 
-; Check if the a20 line is enabled
-check_a20:
-	mov ax, 0x0000
-	mov fs, ax
-	mov si, 0x500
-	mov al, [fs:si]
-	mov [belowMB], al
-
-	mov ax, 0xffff
-	mov gs, ax
-	mov di, 0x510
-	mov al, [gs:di]
-	mov [overMB], al
-
-	xor ax, ax
-	mov byte [fs:si], 0x00
-	mov byte [gs:di], 0x01
-	mov al, [gs:si]
-	cmp al, [fs:di]
-	jne after_a20
-
-; If not, enable the a20 line
+; Enable A20 line
 enable_a20:
-	call busy_a20
-	mov al, 0xD1
-	out 0x64, al
-	call busy_a20
-	mov al, 0xDF
-	out 0x64, al
-	call busy_a20
-	call check_a20
-
-; Restore the values in memory
-after_a20:
-	mov al, [belowMB]
-	mov [fs:si], al
-	mov al, [overMB]
-	mov [gs:di], al
+	in al, 0x92
+	test al, 2
+	jnz after
+	or al, 2
+	and al, 0xFE
+	out 0x92, al
+after:
 
 ; Set VGA 80x25 video mode
 set_vga:
@@ -92,7 +63,7 @@ enter_pm:
 
 	jmp 0x08:load_seg
 
-bits 32
+[ BITS 32 ]
 ; Load the data segments to the kernel's data segments descriptor
 load_seg:
 	mov ax, 0x10
@@ -101,15 +72,12 @@ load_seg:
 
 ; Jump to the kernel
 movek:
-	mov edx, 0x1234
-	xor edx, edx
-	mov dx, [0x7E00 + 0x18]
-	jmp edx
+	jmp [0x7E00 + 0x18]
 halt:
 	cli
 	hlt
 
-bits 16
+[ BITS 16 ]
 ;************************************************
 ; Prints a string
 ; si - Pointer to the string
@@ -126,22 +94,8 @@ print:
 done:
 	ret
 
-;************************************************
-; Checks if the a20 port is busy
-;************************************************
-busy_a20:
-	in al, 0x64
-	test al, 0x02
-	jnz busy_a20
-	ret
-
 boot_msg:
 	db "Welcome to my Operating System!", 0x0A, 0x0D, 0x00
-
-belowMB: 
-	db 0
-overMB:
-	db 0
 
 ;************************************************
 ; Global Descriptor Table
