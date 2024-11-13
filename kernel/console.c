@@ -46,6 +46,6 @@ void consoleClear() {
     int max = VGA_WIDTH * VGA_HEIGHT;
     for (int i = 0; i < max; i++)
         console.buffer[i] = VGA_CHAR(' ', console.color);
-        console.x = 0;
-        console.y = 0;
+    console.x = 0;
+    console.y = 0;
 }
