@@ -1,9 +1,7 @@
 #include "kheaders/console.h"
+#include "kheaders/int.h"
 
 void main() {
-    consoleInit();
-    consoleWriteStr("Hello World");
-    consoleClear();
-    consoleWriteStr("This is a kernel");
+    idt_init();
     for(;;);
 }
