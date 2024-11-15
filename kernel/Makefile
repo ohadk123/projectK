@@ -2,7 +2,7 @@ BUILD_DIR=../build/kernel
 KERNEL=$(BUILD_DIR)/kernel
 
 CC=i686-elf-gcc
-CFLAGS=-ffreestanding -nostdlib -m32 -O -nostdinc -nolibc -Wall -fno-builtin -I../include
+CFLAGS=-ffreestanding -nostdlib -m32 -nostdinc -nolibc -Wall -fno-builtin -I../include
 CFLAGS+=-gdwarf-4 -ggdb3
 
 LD=i686-elf-ld
