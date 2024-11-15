@@ -20,7 +20,7 @@ read_kern:
 	mov ax, KERNSECT
 	mov es, ax
 	xor bx, bx
-	mov al, 2	; read 2 sectors
+	mov al, 17	; read 17 sectors == kernel is limited at 8704 bytes
 	mov ch, 0	; track 0
 	mov cl, 2	; from sector 2
 	mov dh, 0	; head 0
