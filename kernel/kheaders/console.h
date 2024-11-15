@@ -1,11 +1,7 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
-#define VGA_WIDTH 80
-#define VGA_HEIGHT 25
-#define VGA_BUFFER ((uint16 *)0xB8000)
-
-#include <stdint.h>
+#include <libok/ktypes.h>
 
 enum VGAColor {
     VGA_COLOR_BLACK,
@@ -24,13 +20,6 @@ enum VGAColor {
     VGA_COLOR_LIGHT_MAGENTA,
     VGA_COLOR_LIGHT_BROWN,
     VGA_COLOR_WHITE
-};
-
-struct VGAConsole {
-    uint8 x;
-    uint8 y;
-    uint8 color;
-    uint16 *buffer;
 };
 
 #define VGA_ATTR(fg, bg) (bg << 4) | fg

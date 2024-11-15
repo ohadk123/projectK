@@ -1,7 +1,15 @@
-#include <console.h>
+#include "kheaders/console.h"
 
+#define VGA_WIDTH 80
+#define VGA_HEIGHT 25
+#define VGA_BUFFER ((uint16 *)0xB8000)
 
-struct VGAConsole console;
+struct VGAConsole {
+    uint8 x;
+    uint8 y;
+    uint8 color;
+    uint16 *buffer;
+} console;
 
 void consoleInit() {
     console.color = VGA_ATTR(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
