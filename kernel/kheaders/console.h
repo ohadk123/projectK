@@ -25,14 +25,14 @@ enum VGAColor {
 #define VGA_ATTR(fg, bg) (bg << 4) | fg
 #define VGA_CHAR(c, attr) (uint16) c | (uint16) attr << 8
 
-void consoleInit();
-void consoleSetAttr(uint8 fg, uint8 bg);
-void consolePutCharAt(char c, uint8 x, uint8 y);
-void consolePutChar(char c);
-void consoleWrite(const char* str, int len);
-int consoleStrLen(const char* str);
-void consoleClear();
+void console_init();
+void console_set_attr(uint8 fg, uint8 bg);
+void console_putc_at(char c, uint8 x, uint8 y);
+void console_putc(char c);
+void console_write(const char* str, int len);
+int console_strlen(const char* str);
+void console_clear();
 
-#define consoleWriteStr(str) consoleWrite(str, consoleStrLen(str))
+#define console_puts(str) console_write(str, console_strlen(str))
 
 #endif // CONSOLE_H

@@ -33,7 +33,7 @@ struct idtr idtreg;
 
 void placeholder() {
     #include "kheaders/console.h"
-    consoleWriteStr("Place Holder Interrupt");
+    console_puts("Place Holder Interrupt");
 }
 
 union desc_val {
