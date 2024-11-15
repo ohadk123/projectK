@@ -2,8 +2,10 @@ BUILD_DIR=../build/kernel
 KERNEL=$(BUILD_DIR)/kernel
 
 CC=i686-elf-gcc
-CFLAGS=-ffreestanding -nostdlib -m32 -nostdinc -nolibc -Wall -fno-builtin -I../include
+CFLAGS+=-ffreestanding -nostdlib -m32 -nostdinc -nolibc -Wall -fno-builtin -I../include
+ifeq ($(DEBUG), 1)
 CFLAGS+=-gdwarf-4 -ggdb3
+endif
 
 LD=i686-elf-ld
 LDFLAGS=-m elf_i386 -nmagic -M
