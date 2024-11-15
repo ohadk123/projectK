@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "console.h": "c",
+        "stdio.h": "c",
+        "stdint.h": "c",
+        "stddef.h": "c",
+        "string.h": "c"
+    },
+    "C_Cpp.default.includePath": [
+        "~/Desktop/projectK/include"
+    ],
+    "C_Cpp.default.compilerPath": "~/opt/cross/bin/i686-elf-gcc",
+    "C_Cpp.default.compilerArgs": [
+        "-Wall", "-ffreestanding", "-nostdlib", "-m32", "-nostdinc", "-nolibc", "-fno-builtin"
+    ],
+}
