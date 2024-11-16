@@ -25,17 +25,30 @@ void inline console_set_attr(uint8 fg, uint8 bg) {
     console.color = VGA_ATTR(fg, bg);
 }
 
-void console_putc_at(char c, uint8 x, uint8 y) {
-    int i = y * VGA_WIDTH + x;
-    console.buffer[i] = VGA_CHAR(c, console.color);
+void inline console_putc_at(char c, uint8 x, uint8 y) {
+    console.buffer[y * VGA_WIDTH + x] = VGA_CHAR(c, console.color);
 }
 
 void console_putc(char c) {
-    console_putc_at(c, console.x, console.y);
-    if (++console.x == VGA_WIDTH) {
-        console.x = 0;
-        if (++console.y == VGA_HEIGHT)
-            console.y = 0;
+    switch (c) {
+        case '\n':
+            console.x = 0;
+            if (++console.y == VGA_HEIGHT)
+                console_clear();
+            return;
+        case '\r':
+            console.x = 0;
+            return;
+        case '\t':
+            console_puts("    ");
+            return;
+        default:
+            console_putc_at(c, console.x, console.y);
+            if (++console.x == VGA_WIDTH) {
+                console.x = 0;
+                if (++console.y == VGA_HEIGHT)
+                    console_clear();
+            }
     }
 }
 
@@ -47,7 +60,7 @@ void console_write(const char* str, int len) {
 int console_strlen(const char* str) {
     int len = 0;
     while (str[len++]);
-    return len;
+    return len-1;
 }
 
 void console_clear() {
