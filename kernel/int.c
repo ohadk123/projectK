@@ -1,6 +1,7 @@
 #include <libok/ktypes.h>
 #include <string.h>
 #include "kheaders/config.h"
+#include "kheaders/console.h"
 
 #define TASK_GATE 0x5
 #define INT_GATE_16 0x6
@@ -32,8 +33,7 @@ struct idtr {
 struct idtr idtreg;
 
 void placeholder() {
-    #include "kheaders/console.h"
-    console_puts("Place Holder Interrupt");
+    console_puts("Place Holder Interrupt\n");
 }
 
 union desc_val {

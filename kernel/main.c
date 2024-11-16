@@ -1,12 +1,14 @@
 #include "kheaders/console.h"
 #include "kheaders/int.h"
+#include "kheaders/asm.h"
 
 void main() {
+    cli();
     console_init();
     idt_init();
-    __asm__("int $0");
-    __asm__("int $8");
-    __asm__("int $100");
-    __asm__("int $3");
-    for(;;);
+    sti();
+    console_puts("Hello, World!\n");
+    int(0);
+    cli();
+    hlt();
 }
