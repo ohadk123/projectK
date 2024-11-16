@@ -14,4 +14,7 @@
 #define outw(port, data) asm ("outw %0, %1" : : "a"((uint16) data), "Nd"(port))
 #define outl(port, data) asm ("outl %0, %1" : : "a"((uint32) data), "Nd"(port))
 
+#define int(offset) asm volatile("int %0" :: "i"(offset))
+#define hlt() asm volatile("hlt")
+
 #endif
