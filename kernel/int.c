@@ -1,30 +1,10 @@
 #include <libok/ktypes.h>
 #include <string.h>
-#include "kheaders/config.h"
+#include "kheaders/int.h"
 #include "kheaders/console.h"
+#include "kheaders/isr.h"
 
-#define TASK_GATE 0x5
-#define INT_GATE_16 0x6
-#define TRAP_GATE_16 0x7
-#define INT_GATE_32 0xe
-#define TRAP_GATE_32 0xf
-
-struct idt_desc {
-    uint16 offset_low;
-    uint16 selector;
-    uint8 zero;
-    uint8 attr;
-    uint16 offset_high;
-} __attribute__((packed));
 struct idt_desc idt[IDT_ENTRIES];
-
-#define IDT_ATTR(type, dpl) (0x80 | dpl << 5 | type)
-#define INT_ADD(index, off, type, dpl) \
-    idt[index].offset_low = (uint32) off & 0xffff, \
-    idt[index].selector = CODE_S, \
-    idt[index].zero = 0, \
-    idt[index].attr = IDT_ATTR(type, dpl), \
-    idt[index].offset_high = (uint32) off >> 16
 
 struct idtr {
     uint16 limit;
@@ -32,23 +12,17 @@ struct idtr {
 } __attribute__((packed));
 struct idtr idtreg;
 
-void placeholder() {
-    console_puts("Place Holder Interrupt\n");
+void set_int(struct idt_desc *desc, void *handler, int type, int dpl) {
+    desc->offset_low = (uint32) handler & 0xffff;
+    desc->selector = CODE_S;
+    desc->zero = 0;
+    desc->attr = (0x80 | dpl << 5 | type);
+    desc->offset_high = (uint32) handler >> 16;
 }
 
-union desc_val {
-    struct idt_desc desc;
-    uint64 val;
-};
-
 void idt_init() {
-    struct idt_desc defint = {
-        .offset_low = ((uint32) placeholder) & 0xffff,
-        .selector = CODE_S,
-        .zero = 0,
-        .attr = IDT_ATTR(INT_GATE_32, 0),
-        .offset_high = ((uint32) placeholder) >> 16
-    };
+    struct idt_desc defint;
+    set_int(&defint, (void *) isr_placeholder, INT_GATE_32, 0);
 
     for (int i = 0; i < IDT_ENTRIES; i++)
         idt[i] = defint;
@@ -56,4 +30,8 @@ void idt_init() {
     idtreg.limit = sizeof(idt) - 1;
     idtreg.base = (uint32) idt;
     asm volatile("lidt %0" :: "m"(idtreg));
+}
+
+void placeholder_handler() {
+    console_puts("Place Holder Interrupt\n");
 }
