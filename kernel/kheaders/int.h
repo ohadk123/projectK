@@ -17,7 +17,7 @@ struct idt_desc {
     uint16 offset_high;
 } __attribute__((packed));
 
-void set_int(struct idt_desc *desc, void *handler, int type, int dpl);
+void set_int(struct idt_desc *desc, void (*handler)(void), int type, int dpl);
 void idt_init();
 
 void placeholder_handler();

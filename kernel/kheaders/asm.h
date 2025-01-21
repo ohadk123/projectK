@@ -17,4 +17,6 @@
 #define int(offset) asm volatile("int %0" :: "i"(offset))
 #define hlt() asm volatile("hlt")
 
+#define io_wait() outb(0x80, 0)
+
 #endif

@@ -8,24 +8,34 @@
 extern struct idt_desc idt[];
 
 void pic_init() {
-    // ICW1
+    
+	// ICW1
 	outb(PICM_COM, 0x11);
 	outb(PICS_COM, 0x11);
+	io_wait();
 
     // ICW2
 	outb(PICM_DATA, IRQ0);
 	outb(PICS_DATA, IRQ8);
+	io_wait();
 
     // ICW3
 	outb(PICM_DATA, 0x04);
 	outb(PICS_DATA, 0x02);
+	io_wait();
 	
     // ICW4
 	outb(PICM_DATA, 0x01);
 	outb(PICS_DATA, 0x01);
+	io_wait();
 
-	set_int(&idt[TIMER_IRQ], (void *) isr_timer, INT_GATE_32, 0);
-    set_int(&idt[KEYBOARD_IRQ], (void *) isr_keyboard, INT_GATE_32, 0);
+	// clear masks
+	outb(PICM_DATA, 0x00);	
+	outb(PICS_DATA, 0x00);
+	io_wait();
+
+	set_int(&idt[TIMER_IRQ], isr_timer, INT_GATE_32, 0);
+    set_int(&idt[KEYBOARD_IRQ], isr_keyboard, INT_GATE_32, 0);
 }
 
 void timer_handler() {

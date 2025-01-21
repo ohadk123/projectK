@@ -52,9 +52,11 @@ set_stack:
 	mov ax, 0x7C00
 	mov sp, ax
 
+; Load the gdt register
 load_gdt:
-	cli			; Can never be too sure
+	cli
 	lgdt [gdtr]
+
 ; Enter protected mode
 enter_pm:
 	mov eax, cr0
@@ -72,7 +74,7 @@ load_seg:
 
 ; Jump to the kernel
 movek:
-	jmp [0x7E00 + 0x18]
+	jmp [KERNSECT*0x10 + 0x18]
 halt:
 	cli
 	hlt

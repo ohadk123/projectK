@@ -1,5 +1,4 @@
 #include <libok/ktypes.h>
-#include <string.h>
 #include "kheaders/int.h"
 #include "kheaders/console.h"
 #include "kheaders/isr.h"
@@ -12,7 +11,7 @@ struct idtr {
 } __attribute__((packed));
 struct idtr idtreg;
 
-void set_int(struct idt_desc *desc, void *handler, int type, int dpl) {
+void set_int(struct idt_desc *desc, void (*handler)(void), int type, int dpl) {
     desc->offset_low = (uint32) handler & 0xffff;
     desc->selector = CODE_S;
     desc->zero = 0;
@@ -22,7 +21,7 @@ void set_int(struct idt_desc *desc, void *handler, int type, int dpl) {
 
 void idt_init() {
     struct idt_desc defint;
-    set_int(&defint, (void *) isr_placeholder, INT_GATE_32, 0);
+    set_int(&defint, isr_placeholder, INT_GATE_32, 0);
 
     for (int i = 0; i < IDT_ENTRIES; i++)
         idt[i] = defint;
