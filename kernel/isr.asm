@@ -24,5 +24,5 @@ isr_%1:
 %endmacro
 
 ISR placeholder
-ISR timer
+ISR empty
 ISR keyboard

@@ -34,3 +34,5 @@ void idt_init() {
 void placeholder_handler() {
     console_puts("Place Holder Interrupt\n");
 }
+
+void empty_handler() {}

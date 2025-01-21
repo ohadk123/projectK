@@ -34,11 +34,8 @@ void pic_init() {
 	outb(PICS_DATA, 0x00);
 	io_wait();
 
-	set_int(&idt[TIMER_IRQ], isr_timer, INT_GATE_32, 0);
+	set_int(&idt[TIMER_IRQ], isr_empty, INT_GATE_32, 0);
     set_int(&idt[KEYBOARD_IRQ], isr_keyboard, INT_GATE_32, 0);
-}
-
-void timer_handler() {
 }
 
 void keyboard_handler() {
