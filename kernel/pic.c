@@ -39,7 +39,6 @@ void pic_init() {
 }
 
 void timer_handler() {
-	console_puts("timer tick\n");
 }
 
 void keyboard_handler() {
