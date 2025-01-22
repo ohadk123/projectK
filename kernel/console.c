@@ -36,12 +36,25 @@ void console_putc(char c) {
             if (++console.y == VGA_HEIGHT)
                 console_clear();
             return;
+
         case '\r':
             console.x = 0;
             return;
+
         case '\t':
             console_puts("    ");
             return;
+        
+        case '\b':
+            if (console.x > 0)
+                console.x--;
+            else if (console.y > 0) {
+                console.y--;
+                console.x = VGA_WIDTH - 1;
+            }
+            console_putc_at(0, console.x, console.y);
+            return;
+
         default:
             console_putc_at(c, console.x, console.y);
             if (++console.x == VGA_WIDTH) {
@@ -66,7 +79,7 @@ int console_strlen(const char* str) {
 void console_clear() {
     int max = VGA_WIDTH * VGA_HEIGHT;
     for (int i = 0; i < max; i++)
-        console.buffer[i] = VGA_CHAR(' ', console.color);
+        console.buffer[i] = VGA_CHAR(0, console.color);
     console.x = 0;
     console.y = 0;
 }
