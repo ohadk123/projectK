@@ -1,0 +1,9 @@
+services:
+  projectk:
+    build: .
+    container_name: projectk
+    stdin_open: true
+    tty: true
+    image: projectk
+    volumes:
+      - ..:/root/os
