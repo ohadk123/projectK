@@ -42,7 +42,7 @@ A [Docker image](https://hub.docker.com/r/ohadk123/projectk-cc) containing the n
    ```
 2. Run the Docker container:
    ```sh
-   docker run -it --name projectk-cc -v .:/root/os ohadk123/projectk-cc
+   docker run --rm -it --name projectk-cc -v .:/root/os ohadk123/projectk-cc
    ```
    This will pull the Docker image and build the kernel into `disk.img`.
 
