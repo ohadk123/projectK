@@ -1,9 +1,17 @@
 services:
-  projectk:
+  projectk-cc-build:
     build: .
     container_name: projectk-cc
     stdin_open: true
     tty: true
     image: projectk-cc
+    volumes:
+      - ..:/root/os
+
+  projectk-cc-pull:
+    image: projectk-cc
+    container_name: projectk-cc
+    stdin_open: true
+    tty: true
     volumes:
       - ..:/root/os

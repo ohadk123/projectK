@@ -7,6 +7,7 @@ void main() {
     console_init();
     idt_init();
     pic_init();
+    set_ints();
     sti();
     console_puts("Hello, World!\n");
     for(;;);

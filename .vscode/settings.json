@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.rs": "rust",
         "console.h": "c",
         "stdio.h": "c",
         "stdint.h": "c",
@@ -9,7 +10,8 @@
         "ktypes.h": "c",
         "asm.h": "c",
         "int.h": "c",
-        "isr.h": "c"
+        "isr.h": "c",
+        "config.h": "c"
     },
     "C_Cpp.default.includePath": [
         "~/Desktop/projectK/include"

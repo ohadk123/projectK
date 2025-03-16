@@ -19,7 +19,13 @@ struct idt_desc {
 
 void set_int(struct idt_desc *desc, void (*handler)(void), int type, int dpl);
 void idt_init();
+void set_ints();
+
+// Actual interrupt handlers
 
 void placeholder_handler();
+void empty_handler();
+void keyboard_handler();
+void timer_handler();
 
 #endif // INT_H

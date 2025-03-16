@@ -37,7 +37,4 @@
 
 void pic_init();
 
-void timer_handler();
-void keyboard_handler();
-
 #endif

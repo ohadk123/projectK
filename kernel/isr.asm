@@ -1,7 +1,7 @@
-; Defines a macro to create interrup handlers
+; Defines a macro to create interrup service routines
 ; some assembly code is needed before jumping into a interrupt function
 ; ISR - Interrupt Service Routine
-; The C function must be named '<something>_handler' accepts no arguments and returns void
+; The C function must be named '<name>_handler' accepts no arguments and returns void
 ; 'isr_<name>' will be the name of the int service routine
 ; After creating the C function called '<name>_handler', you must add the line 'ISR <name>' here, and declare it in isr.h 
 ; Example:
@@ -27,3 +27,4 @@ isr_%1:
 ISR placeholder
 ISR empty
 ISR keyboard
+ISR timer
